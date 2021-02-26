@@ -11,6 +11,7 @@ namespace  ab_test_react.Data
         {
             optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=abtest;Username=postgres;Password=abtest");
         }
+
         public DbSet<UserDataModel> Users { get; set; }
     }    
 }

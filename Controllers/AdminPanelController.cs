@@ -11,7 +11,7 @@ using ab_test_react.Data.Models;
 namespace ab_test_react.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class AdminPanelController : ControllerBase
     {
         protected ApplicationDbContext _context;
@@ -25,24 +25,24 @@ namespace ab_test_react.Controllers
         [HttpGet("GetUsers")]
         public IEnumerable<UserDataModel> GetUsers()
         {
-            var result = new List<UserDataModel>();
-            result = _context.Users.ToList();
-            
-            return result;
+            return _context.Users.OrderBy((o)=> o.DateRegistration);
         }
 
         [HttpPost]
         [Route("CreateUser")]
-        public UserDataModel CreateUser(UserDataModel user)
+        public async Task<IActionResult> CreateUser(UserDataModel user)
         {
-            var model = new UserDataModel();
-            model.UserId = user.UserId.ToString();
-            model.DateRegistration = user.DateRegistration;
-            model.DateLastActivity = user.DateLastActivity;
+            var model = new UserDataModel
+            {
+                UserId = user.UserId.ToString(),
+                DateRegistration = user.DateRegistration,
+                DateLastActivity = user.DateLastActivity
+            };
 
             _context.Users.Add(model);
-            _context.SaveChanges();
-            return model;
+            await _context.SaveChangesAsync();
+            
+            return Ok();
         }
     }
 }

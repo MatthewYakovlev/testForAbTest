@@ -1,27 +1,17 @@
 import React, { Component } from 'react';
 import { CreateUserForm } from './Form';
+import { UsersList } from './UsersList';
 
 export class Home extends Component {
-  static displayName = Home.name;
-
   constructor(props) {
     super(props);
-    this.state = { users: [], loading: true };
   }
-
-  componentDidMount() {
-    this.getUsers();
-  }
-
   render() {
     return (
       <div>
-        <CreateUserForm/>
+        <CreateUserForm />
+        <UsersList />
       </div>
     );
-  }
-
-  async getUsers() {
-    this.setState({ forecasts: data, loading: false });
   }
 }

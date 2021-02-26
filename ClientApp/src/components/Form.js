@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import AdminPanelService from '../services/AdminPanel';
+
+const adminPanelService = new AdminPanelService();
 
 export class CreateUserForm extends Component {
   constructor(props) {
@@ -7,7 +9,7 @@ export class CreateUserForm extends Component {
     this.state = {
         userId: null,
         dateRegistration: null,
-        dateLastAcitivity: null
+        dateLastActivity: null
     };
   
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -18,10 +20,13 @@ export class CreateUserForm extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    axios.post(`adminpanel/CreateUser`, { user: this.state })
-      .then(res => {
-        console.log(res);
-    })
+
+    const user = Object.assign({}, this.state)
+    
+    adminPanelService.create(user)
+      .then((response) => {
+        console.log('RESPONSE: ', response)
+      })
   }
 
   handleInputChange(event) {
@@ -37,7 +42,7 @@ export class CreateUserForm extends Component {
         <form onSubmit={this.handleSubmit}>
             <label>
                 UserId:
-                <input type="number" name="userId" onChange={this.handleInputChange} />
+                <input type="text" name="userId" onChange={this.handleInputChange} />
             </label>
             <label>
                 Date registration:
@@ -45,7 +50,7 @@ export class CreateUserForm extends Component {
             </label>
             <label>
                 Date last activity
-                <input type="date" name="dateLastAcitivity" onChange={this.handleInputChange}/>
+                <input type="date" name="dateLastActivity" onChange={this.handleInputChange}/>
             </label>
             
             <input type="submit" value="Save" />
