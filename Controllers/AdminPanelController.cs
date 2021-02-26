@@ -27,6 +27,29 @@ namespace ab_test_react.Controllers
         {
             return _context.Users.OrderBy((o)=> o.DateRegistration);
         }
+        
+        [HttpGet("Calculate")]
+        public CalculateResponse Calculate()
+        {
+            int dayCount = 7;
+            int usersComebackCount = _context.Users
+                .Where(u => u.DateLastActivity >= u.DateRegistration.AddDays(dayCount)).ToList().Count;
+            
+            int usersRecentlyInstalledCount = _context.Users
+                .Where(u => DateTime.Today.AddDays(-dayCount) >= u.DateRegistration ).ToList().Count;
+            
+            List<double> lifetimes = new List<double>();
+            _context.Users.ToList().ForEach(delegate(UserDataModel user)
+            {
+                lifetimes.Add((user.DateLastActivity - user.DateRegistration).TotalDays);
+            });
+            
+            CalculateResponse response = new CalculateResponse();
+            response.RollingRetention = (double)usersComebackCount / usersRecentlyInstalledCount * 100.0;
+            response.UsersLifetime = lifetimes;
+            
+            return response;
+        }
 
         [HttpPost]
         [Route("CreateUser")]

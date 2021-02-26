@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
 import AdminPanelService from '../services/AdminPanel';
+import styles from '../styles/Form.module.css';
 
 const adminPanelService = new AdminPanelService();
 
@@ -7,13 +11,16 @@ export class CreateUserForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        userId: null,
-        dateRegistration: null,
-        dateLastActivity: null
+      userId: null,
+      dateRegistration: null,
+      dateLastActivity: null,
+      isToggledSnackbar: false,
+      toggleText: null
     };
   
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   componentDidMount() {}
@@ -21,11 +28,21 @@ export class CreateUserForm extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    const user = Object.assign({}, this.state)
+    const {userId, dateRegistration, dateLastActivity} = this.state;
     
-    adminPanelService.create(user)
+    adminPanelService.create({userId, dateLastActivity, dateRegistration})
       .then((response) => {
-        console.log('RESPONSE: ', response)
+        if (response.is_error) {
+          this.setState({
+            toggleText: 'Error try again =(',
+            isToggledSnackbar: true
+          })
+        } else {
+          this.setState({
+            toggleText: 'User created!',
+            isToggledSnackbar: true
+          })
+        }
       })
   }
 
@@ -36,25 +53,50 @@ export class CreateUserForm extends Component {
     });
   }
 
+  handleClose() {
+    this.setState({
+      isToggledSnackbar: false
+    })
+  }
+
 
   render() {
     return (
-        <form onSubmit={this.handleSubmit}>
-            <label>
-                UserId:
-                <input type="text" name="userId" onChange={this.handleInputChange} />
-            </label>
-            <label>
-                Date registration:
-                <input type="date" name="dateRegistration" onChange={this.handleInputChange}/>
-            </label>
-            <label>
-                Date last activity
-                <input type="date" name="dateLastActivity" onChange={this.handleInputChange}/>
-            </label>
-            
-            <input type="submit" value="Save" />
-      </form>
+      <div className={styles.wrapper}>
+        <form className={styles.form} noValidate autoComplete="off" onSubmit={this.handleSubmit}>
+          <TextField id="standard-basic" label="UserId" name="userId" onChange={this.handleInputChange} />
+          <TextField
+            id="date"
+            label="dateRegistration"
+            name="dateRegistration"
+            type="date"
+            defaultValue="2021-01-01"
+            onChange={this.handleInputChange}
+          />
+          <TextField
+            id="date"
+            label="dateLastActivity"
+            name="dateLastActivity"
+            type="date"
+            defaultValue="2021-01-01"
+            onChange={this.handleInputChange}
+          />
+          <Button type="submit" variant="contained" color="primary">
+            Save
+          </Button>
+        </form>
+
+        <Snackbar
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+            }}
+            onClose={this.handleClose}
+            open={this.state.isToggledSnackbar}
+            autoHideDuration={1000}
+            message={this.state.toggleText}
+        />
+      </div>
     );
   }
 }

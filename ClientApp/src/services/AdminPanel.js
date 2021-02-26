@@ -6,6 +6,10 @@ export default class AdminPanelService {
         return RestUtilities.get('/api/adminpanel/GetUsers');
     }
 
+    calculate() {
+        return RestUtilities.get('/api/adminpanel/Calculate');
+    }
+
     update(user) {
         return RestUtilities.put(`/api/adminpanel/Update/${user.userId}`, user);
     }

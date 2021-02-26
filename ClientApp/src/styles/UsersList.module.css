@@ -1,0 +1,13 @@
+.usersList {
+    display: grid;
+    justify-items: center;
+    row-gap: 36px;
+}
+
+.usersList > button {
+    max-width: 240px;
+}
+
+.textInfo {
+    height: 50px;
+}
