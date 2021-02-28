@@ -11,7 +11,7 @@ export default class AdminPanelService {
     }
 
     update(user) {
-        return RestUtilities.put(`/api/adminpanel/Update/${user.userId}`, user);
+        return RestUtilities.put(`/api/adminpanel/${user.userId}`, user);
     }
 
     create(user) {

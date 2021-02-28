@@ -1,0 +1,17 @@
+.textField {
+    background: white;
+    height: 28px;
+    border-radius: 20px;
+}
+.textField > input {
+    border: none;
+    width: 100%;
+    padding: 5px 12px;
+    border-radius: 20px;
+}
+.textField >input[type=date] {
+    cursor: pointer;
+}
+.textField > input:focus {
+    outline: none;
+}

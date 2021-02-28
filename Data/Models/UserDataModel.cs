@@ -11,8 +11,7 @@ namespace ab_test_react.Data.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
-        [MinLength(3)]
-        public string UserId { get; set; }
+        public int UserId { get; set; }
         
         [Required]
         public DateTime DateRegistration { get; set; }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import { Button } from './Button';
+import { TextField } from './TextField';
 import Snackbar from '@material-ui/core/Snackbar';
 import AdminPanelService from '../services/AdminPanel';
 import styles from '../styles/Form.module.css';
@@ -23,8 +23,6 @@ export class CreateUserForm extends Component {
     this.handleClose = this.handleClose.bind(this);
   }
 
-  componentDidMount() {}
-
   handleSubmit(event) {
     event.preventDefault();
 
@@ -42,14 +40,18 @@ export class CreateUserForm extends Component {
             toggleText: 'User created!',
             isToggledSnackbar: true
           })
+
+          this.props.onSubmit()
         }
       })
   }
 
   handleInputChange(event) {
     const name = event.target.name;
+    const value = event.target.value
+
     this.setState({
-      [name]: event.target.value    
+      [name]: value
     });
   }
 
@@ -59,33 +61,9 @@ export class CreateUserForm extends Component {
     })
   }
 
-
   render() {
     return (
       <div className={styles.wrapper}>
-        <form className={styles.form} noValidate autoComplete="off" onSubmit={this.handleSubmit}>
-          <TextField id="standard-basic" label="UserId" name="userId" onChange={this.handleInputChange} />
-          <TextField
-            id="date"
-            label="dateRegistration"
-            name="dateRegistration"
-            type="date"
-            defaultValue="2021-01-01"
-            onChange={this.handleInputChange}
-          />
-          <TextField
-            id="date"
-            label="dateLastActivity"
-            name="dateLastActivity"
-            type="date"
-            defaultValue="2021-01-01"
-            onChange={this.handleInputChange}
-          />
-          <Button type="submit" variant="contained" color="primary">
-            Save
-          </Button>
-        </form>
-
         <Snackbar
             anchorOrigin={{
                 vertical: 'bottom',
@@ -96,6 +74,26 @@ export class CreateUserForm extends Component {
             autoHideDuration={1000}
             message={this.state.toggleText}
         />
+        <form className={styles.form} noValidate autoComplete="off">
+          <TextField 
+            name={'userId'}
+            type={'number'}
+            onChange={this.handleInputChange}
+          />
+          <TextField
+            name={'dateRegistration'}
+            type={'date'}
+            defaultValue={'2021-01-01'}
+            onChange={this.handleInputChange}
+          />
+          <TextField
+            name={'dateLastActivity'}
+            type={'date'}
+            defaultValue={'2021-01-01'}
+            onChange={this.handleInputChange}
+          />
+          <Button text={'Save'} onClick={this.handleSubmit.bind(this)}/>
+        </form>
       </div>
     );
   }

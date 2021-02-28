@@ -55,9 +55,13 @@ namespace ab_test_react.Controllers
         [Route("CreateUser")]
         public async Task<IActionResult> CreateUser(UserDataModel user)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var model = new UserDataModel
             {
-                UserId = user.UserId.ToString(),
+                UserId = user.UserId,
                 DateRegistration = user.DateRegistration,
                 DateLastActivity = user.DateLastActivity
             };
@@ -65,6 +69,19 @@ namespace ab_test_react.Controllers
             _context.Users.Add(model);
             await _context.SaveChangesAsync();
             
+            return Ok();
+        }
+        
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody]UserDataModel user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            user.UserId = id;
+            _context.Update(user);
+            await _context.SaveChangesAsync();
             return Ok();
         }
     }

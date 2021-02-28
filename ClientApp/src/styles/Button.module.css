@@ -1,0 +1,18 @@
+.button {
+    border-radius: 10px;
+    background: #4A9DFF;
+    min-width: 189px;
+    height: 38px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 16px;
+    border: none;
+    color: white;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+.button:focus {
+    outline: none;
+}
+.button:active {
+    outline: none;
+}
